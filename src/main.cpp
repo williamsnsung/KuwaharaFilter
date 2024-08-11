@@ -6,6 +6,8 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
+// TODO create an RAII class to handle the loaded images from stb_image
+
 int main() {
     std::filesystem::path f = "../TestPhotos/MyPhotos/IMG_0398.jpeg";
     assert(std::filesystem::exists(f));
