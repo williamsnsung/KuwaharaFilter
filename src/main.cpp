@@ -109,11 +109,7 @@ int scanhead(FILE *infile, int *image_width, int *image_height)
 
 int main()
 {
-    char* file_path = "../TestPhotos/MyPhotos/IMG_0398.jpeg";
-    //    std::filesystem::path f = "../TestPhotos/MyPhotos/IMG_0398.jpeg";
-    //    assert(std::filesystem::exists(f));
-    //    if (std::filesystem::is_regular_file(f))
-    //        std::cout << f << "is a file; its size is " << std::filesystem::file_size(f) << '\n';
+    char* file_path = "../TestPhotos/ThisPersonDoesNotExist/thispersondoesnotexist.jpg";
 
     FILE *p = fopen(file_path, "r");
     int width, height, bpp;
@@ -123,7 +119,7 @@ int main()
     std::cout << width << " " << height;
 
     uint8_t *rgb_image = stbi_load(file_path, &width, &height, &bpp, 3);
-    stbi_write_png("image.png", width, height, bpp, rgb_image, width * bpp);
+    stbi_write_jpg("image.jpg", width, height, bpp, rgb_image, 100);
     stbi_image_free(rgb_image);
     return 0;
 }
