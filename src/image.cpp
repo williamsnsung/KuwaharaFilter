@@ -1,22 +1,29 @@
 #include "image.h"
+// https://stackoverflow.com/questions/2076475/read-an-image-file-in-c-c-into-an-array
+// Last accessed [2024-08-11]
+#define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
+#define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb_image_write.h"
 
 Image::Image(std::string file_path)
 {
-    fp = fopen(file_path.c_str(), "r");
-    int width, height, bpp;
-    bpp = 3;
+    const char* c_file_path = file_path.c_str();
+    fp = fopen(c_file_path, "r");
     scanhead(fp, &width, &height);
-    std::cout << width << " " << height;
+    rgb_image = stbi_load(c_file_path, &width, &height, &channels_in_file, 0);
+    fclose(fp);
 }
 
 Image::~Image()
 {
-    fclose(fp);
+    stbi_image_free(rgb_image);
 }
 
-
+int Image::write_to_file(std::string file_path)
+{
+    return stbi_write_jpg(file_path.c_str(), width, height, channels_in_file, rgb_image, jpeg_write_quality);
+}
 
 
 // https://stackoverflow.com/questions/317140/get-dimensions-of-jpeg-in-c

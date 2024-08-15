@@ -1,8 +1,6 @@
 #ifndef IMAGE_H
 #define IMAGE_H
 
-// https://stackoverflow.com/questions/2076475/read-an-image-file-in-c-c-into-an-array
-// Last accessed [2024-08-11]
 #include <cstdio>
 #include <iostream>
 
@@ -10,9 +8,12 @@ class Image {
     public:
         Image(std::string file_path);
         ~Image();
+        int write_to_file(std::string file_path);
 
     private:
         FILE *fp;
+        uint8_t* rgb_image;
+        int width, height, channels_in_file = 3, jpeg_write_quality = 100;
 
         bool readbyte(int a, FILE *b);
         bool readword(int a, FILE *b);
