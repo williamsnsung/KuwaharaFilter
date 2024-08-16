@@ -8,8 +8,12 @@
 
 Image::Image(std::string file_path)
 {
-    const char* c_file_path = file_path.c_str();
-    fp = fopen(c_file_path, "r");
+    const char *c_file_path = file_path.c_str();
+    FILE *fp = fopen(c_file_path, "r");
+    if (!fp)
+    {
+        throw std::filesystem::filesystem_error("Image::Image problem opening file", std::error_code());
+    }
     scanhead(fp, &width, &height);
     rgb_image = stbi_load(c_file_path, &width, &height, &channels_in_file, 0);
     fclose(fp);
@@ -25,6 +29,15 @@ int Image::write_to_file(std::string file_path)
     return stbi_write_jpg(file_path.c_str(), width, height, channels_in_file, rgb_image, jpeg_write_quality);
 }
 
+uint8_t& Image::operator[](int i)
+{
+    if (i >= height * width || i < 0)
+    {
+        throw std::out_of_range{"Image::operator[] out of range access"};
+    }
+    return rgb_image[i];
+
+}
 
 // https://stackoverflow.com/questions/317140/get-dimensions-of-jpeg-in-c
 // Last accessed [2024-08-11]
