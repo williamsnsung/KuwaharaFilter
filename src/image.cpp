@@ -1,9 +1,5 @@
 #include "image.h"
-// https://stackoverflow.com/questions/2076475/read-an-image-file-in-c-c-into-an-array
-// Last accessed [2024-08-11]
-#define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
-#define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb_image_write.h"
 
 Image::Image(std::string file_path)
@@ -19,30 +15,42 @@ Image::Image(std::string file_path)
     fclose(fp);
 }
 
+Image::Image(int width, int height)
+    :width{width}
+    ,height{height}
+{
+    // https://stackoverflow.com/questions/4010917/c-malloc-error-invalid-conversion-from-void-to-uint8-t
+    // Last accessed [2024-08-17]
+    // Doing this as I don't want to edit the header files I'm using for reading and writing images
+    rgb_image = static_cast<uint8_t *>(malloc(width*height*channels_in_file)); 
+}
+
 Image::~Image()
 {
     stbi_image_free(rgb_image);
 }
+
+
 
 int Image::write_to_file(std::string file_path)
 {
     return stbi_write_jpg(file_path.c_str(), width, height, channels_in_file, rgb_image, jpeg_write_quality);
 }
 
-uint8_t& Image::operator[](int i)
+uint8_t& Image::loc(int i, int j)
 {
-    if (i >= height * width || i < 0)
+    if (i >= height || j >= width || i < 0 || j < 0)
     {
         throw std::out_of_range{"Image::operator[] out of range access"};
     }
-    return rgb_image[i];
+    return rgb_image[i * width + j];
 
 }
 
+// NOTE: I did not write the below, just copied it from the source in the below answer
+
 // https://stackoverflow.com/questions/317140/get-dimensions-of-jpeg-in-c
 // Last accessed [2024-08-11]
-
-/* portions derived from IJG code */
 
 #define readbyte(a,b) do if(((a)=getc((b))) == EOF) return 0; while (0)
 #define readword(a,b) do { int cc_=0,dd_=0; \
