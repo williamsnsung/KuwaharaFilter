@@ -5,21 +5,6 @@
 // Last accessed [2024-08-11]
 #define STB_IMAGE_IMPLEMENTATION
 #define STB_IMAGE_WRITE_IMPLEMENTATION
-#include "stb_image.h"
-#include "stb_image_write.h"
-
-Image kuwahara_filter(const Image& img)
-{
-    Image processed_image(img.width, img.height);
-    for (int i = 0; i < img.height; i++)
-    {
-        for (int j = 0; j < img.width; j++)
-        {
-
-        }
-    }
-    return processed_image;
-}
 
 int main()
 {
