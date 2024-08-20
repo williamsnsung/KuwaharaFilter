@@ -1,6 +1,7 @@
 #ifndef IMAGE_H
 #define IMAGE_H
 
+#include <algorithm>
 #include <cstdio>
 #include <stdexcept>
 #include <filesystem>
@@ -17,6 +18,8 @@ class Image {
 
         Image(Image&& img);
         Image& operator=(Image&& img);
+
+        void swap(Image& img);
 
         int write_to_file(std::string file_path);
         uint8_t& loc(int i, int j); // height rows of width pixels

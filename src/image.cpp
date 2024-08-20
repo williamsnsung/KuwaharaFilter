@@ -31,65 +31,40 @@ Image::~Image()
 }
 
 
-Image::Image(const Image& img)
-    :width(img.width)
-    ,height(img.height)
-    ,channels_in_file(img.channels_in_file)
-    ,jpeg_write_quality(img.jpeg_write_quality)
-    ,rgb_image(static_cast<uint8_t *>(malloc(width*height*channels_in_file)))
+// https://stackoverflow.com/questions/3279543/what-is-the-copy-and-swap-idiom
+// Last Accessed [2024-08-20]
+Image::Image(Image img)
+    :Image()
 {
-    for(int i = 0; i < width * height; i++)
-    {
-        rgb_image[i] = img.rgb_image[i];
-    }
+    std::swap(img);
+    return *this;
 }
 
-Image::Image& operator=(const Image& img)
+Image::Image& operator=(Image img)
 {
-    stbi_image_free(rgb_image);
-    rgb_image = static_cast<uint8_t *>(malloc(img.width*img.height*img.channels_in_file)); 
-    for(int i = 0; i < width * height; i++)
-    {
-        rgb_image[i] = img.rgb_image[i];
-    }
-
-    width = img.width;
-    height = img.height;
-    channels_in_file = img.channels_in_file;
-    jpeg_write_quality = img.jpeg_write_quality;
+    swap(img);
+    return *this;
 }
 
-Image::Image(Image&& img)
-    :width(img.width)
-    ,height(img.height)
-    ,channels_in_file(img.channels_in_file)
-    ,jpeg_write_quality(img.jpeg_write_quality)
-    ,rgb_image(static_cast<uint8_t *>(malloc(width*height*channels_in_file)))
+Image::Image(Image&& img) noexcept
 {
-    for(int i = 0; i < width * height; i++)
-    {
-        rgb_image[i] = img.rgb_image[i];
-    }
-    img.rgb_image = nullptr
-    img.width = 0;
-    img.height = 0;
-    img.channels_in_file = 0;
-    img.jpeg_write_quality = 0;
+    std::swap(img);
+    return *this;
 }
 
 Image::Image& operator=(Image&& img)
+    :Image()
 {
-    stbi_image_free(rgb_image);
-    rgb_image = static_cast<uint8_t *>(malloc(img.width*img.height*img.channels_in_file)); 
-    for(int i = 0; i < width * height; i++)
-    {
-        rgb_image[i] = img.rgb_image[i];
-    }
+    std::swap(img);
+}
 
-    width = img.width;
-    height = img.height;
-    channels_in_file = img.channels_in_file;
-    jpeg_write_quality = img.jpeg_write_quality;
+void Image::swap(Image& img)
+{
+    std::swap(width, image.width);
+    std::swap(height, image.height);
+    std::swap(channels_in_file, img.channels_in_file);
+    std::swap(jpeg_write_quality, img.jpeg_write_quality);
+    std::swap(rgb_image, img.rgb_image);
 }
 
 int Image::write_to_file(std::string file_path)
