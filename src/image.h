@@ -5,6 +5,8 @@
 #include <cstdio>
 #include <stdexcept>
 #include <filesystem>
+#include "stb_image.h"
+#include "stb_image_write.h"
 class Image {
     public:
         int width, height, channels_in_file = 3, jpeg_write_quality = 100;
@@ -16,7 +18,7 @@ class Image {
         Image(const Image& img);
         Image& operator=(const Image& img);
 
-        Image(Image&& img);
+        Image(Image&& img) noexcept;
         Image& operator=(Image&& img);
 
         void swap(Image& img);
@@ -26,6 +28,7 @@ class Image {
 
     private:
         uint8_t* rgb_image;
+        uint8_t EDGE_PIXEL_VALUE = 0;
 
         bool readbyte(int a, FILE *b);
         bool readword(int a, FILE *b);

@@ -1,6 +1,4 @@
 #include "image.h"
-#include "stb_image.h"
-#include "stb_image_write.h"
 
 Image::Image(std::string file_path)
 {
@@ -31,37 +29,52 @@ Image::~Image()
 }
 
 
-// https://stackoverflow.com/questions/3279543/what-is-the-copy-and-swap-idiom
-// Last Accessed [2024-08-20]
-Image::Image(Image img)
-    :Image()
+Image::Image(const Image& img)
+        :width(img.width)
+             ,height(img.height)
+             ,channels_in_file(img.channels_in_file)
+             ,jpeg_write_quality(img.jpeg_write_quality)
+             ,rgb_image(static_cast<uint8_t *>(malloc(width*height*channels_in_file)))
 {
-    std::swap(img);
+    for(int i = 0; i < width * height; i++)
+    {
+        rgb_image[i] = img.rgb_image[i];
+    }
+}
+
+Image& Image::operator=(const Image& img)
+{
+    stbi_image_free(rgb_image);
+    rgb_image = static_cast<uint8_t *>(malloc(img.width*img.height*img.channels_in_file)); 
+    for(int i = 0; i < width * height; i++)
+    {
+        rgb_image[i] = img.rgb_image[i];
+    }
+
+    width = img.width;
+    height = img.height;
+    channels_in_file = img.channels_in_file;
+    jpeg_write_quality = img.jpeg_write_quality;
     return *this;
 }
 
-Image::Image& operator=(Image img)
+// https://stackoverflow.com/questions/3279543/what-is-the-copy-and-swap-idiom
+// Last Accessed [2024-08-20]
+Image::Image(Image&& img) noexcept
+{
+    swap(img);
+}
+
+Image& Image::operator=(Image&& img)
 {
     swap(img);
     return *this;
 }
 
-Image::Image(Image&& img) noexcept
-{
-    std::swap(img);
-    return *this;
-}
-
-Image::Image& operator=(Image&& img)
-    :Image()
-{
-    std::swap(img);
-}
-
 void Image::swap(Image& img)
 {
-    std::swap(width, image.width);
-    std::swap(height, image.height);
+    std::swap(width, img.width);
+    std::swap(height, img.height);
     std::swap(channels_in_file, img.channels_in_file);
     std::swap(jpeg_write_quality, img.jpeg_write_quality);
     std::swap(rgb_image, img.rgb_image);
@@ -76,7 +89,7 @@ uint8_t& Image::loc(int i, int j)
 {
     if (i >= height || j >= width || i < 0 || j < 0)
     {
-        return 0;
+        return Image::EDGE_PIXEL_VALUE;
     }
     return rgb_image[i * width + j];
 
