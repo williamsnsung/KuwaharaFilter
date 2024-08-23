@@ -9,6 +9,7 @@
 #include "stb_image_write.h"
 class Image {
     public:
+        // TODO grab number of channels and color model
         int width, height, channels_in_file = 3, jpeg_write_quality = 100;
 
         Image(std::string file_path);
