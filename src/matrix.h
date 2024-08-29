@@ -12,9 +12,6 @@ class Matrix {
         Matrix& operator*=(const Matrix& n);
         Matrix& operator*=(const double& n);
 
-        Matrix& operator/=(const Matrix& n);
-        Matrix& operator/=(const double& n);
-
         Matrix& operator-=(const Matrix& n);
         Matrix& operator-=(const double& n);
 
@@ -25,10 +22,6 @@ class Matrix {
         friend Matrix operator*(const Matrix& lhs, const Matrix& rhs);
         friend Matrix operator*(const double& lhs, const Matrix& rhs);
         friend Matrix operator*(const Matrix& lhs, const double& rhs);
-
-        friend Matrix operator/(const Matrix& lhs, const Matrix& rhs);
-        friend Matrix operator/(const double& lhs, const Matrix& rhs);
-        friend Matrix operator/(const Matrix& lhs, const double& rhs);
 
         friend Matrix operator-(const Matrix& lhs, const Matrix& rhs);
         friend Matrix operator-(const double& lhs, const Matrix& rhs);
@@ -41,4 +34,8 @@ class Matrix {
         int X, Y;
     private:
         std::vector<double> m;
+        // https://stackoverflow.com/questions/8696284/execute-checks-before-initialization-list
+        // Last accessed [2024-08-29]
+        static const int& verify_positive(const int& param);
+        static void verify_dimensions(const int& a, const int& b);
 };

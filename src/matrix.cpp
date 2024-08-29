@@ -1,8 +1,21 @@
 #include "matrix.h"
 
-// TODO add concept to restricit x and y to positive and not both 0
+const int& Matrix::verify_positive(const int& param)
+{
+    if (param <= 0)
+        throw std::length_error("Matrix constructor: magnitude of matrix <= 0");
+    return param;
+}
+
+void Matrix::verify_dimensions(const int& a, const int& b)
+{
+    if (a != b)
+        throw std::length_error("Matrix dimension mismatch: dimensions of matrices are incompatible for operation");
+}
+
+
 Matrix::Matrix(int x, int y)
-    :m(x * y, 0)
+    :m(verify_positive(x * y), 0)
     ,X(x)
     ,Y(y)
 {
@@ -20,9 +33,23 @@ double& Matrix::loc(int i, int j)
     return m[i * Y + j];
 }
 
+// TODO implement the below
 Matrix Matrix::eigenvalues()
-// TODO add concept to make sure that both matrices have correct rows and columns
+{
+    verify_dimensions(X, Y);
+    
+}
+
 Matrix& Matrix::operator*=(const Matrix& n)
+{
+    verify_dimensions(X, n.Y);
+    for (int i = 0; i < X * Y; i++)
+    {
+        m[i] *= n.m[i];
+    }
+    return *this;
+}
+
 Matrix& Matrix::operator*=(const double& n)
 {
     for (auto& i : m)
@@ -32,28 +59,34 @@ Matrix& Matrix::operator*=(const double& n)
     return *this;
 }
 
-// TODO add concept to make sure that both matrices have correct rows and columns
-// TODO add concept to prevent division by 0
-Matrix& Matrix::operator/=(const Matrix& n)
-Matrix& Matrix::operator/=(const double& n)
+
+Matrix& Matrix::operator-=(const Matrix& n)
 {
-    for (auto& i : m)
+    verify_dimensions(X, n.X);
+    verify_dimensions(Y, n.Y);
+    for (int i = 0; i < X * Y; i++)
     {
-        i /= n;
+        m[i] -= n.m[i];
+    }
+    return *this;
+}
+Matrix& Matrix::operator-=(const double& n)
+{
+    *this += -n;
+    return *this;
+}
+
+Matrix& Matrix::operator+=(const Matrix& n)
+{
+    verify_dimensions(X, n.X);
+    verify_dimensions(Y, n.Y);
+    for (int i = 0; i < X * Y; i++)
+    {
+        m[i] += n.m[i];
     }
     return *this;
 }
 
-// TODO add concept to make sure that both matrices have correct rows and columns
-Matrix& Matrix::operator-=(const Matrix& n)
-Matrix& Matrix::operator-=(const double& n)
-{
-    m += -n;
-    return *this;
-}
-
-// TODO add concept to make sure that both matrices have correct rows and columns
-Matrix& Matrix::operator+=(const Matrix& n)
 Matrix& Matrix::operator+=(const double& n)
 {
     for (auto& i : m)
@@ -62,3 +95,16 @@ Matrix& Matrix::operator+=(const double& n)
     }
     return *this;
 }
+
+// TODO
+Matrix operator*(const Matrix& lhs, const Matrix& rhs)
+Matrix operator*(const double& lhs, const Matrix& rhs)
+Matrix operator*(const Matrix& lhs, const double& rhs)
+
+Matrix operator-(const Matrix& lhs, const Matrix& rhs)
+Matrix operator-(const double& lhs, const Matrix& rhs)
+Matrix operator-(const Matrix& lhs, const double& rhs)
+
+Matrix operator+(const Matrix& lhs, const Matrix& rhs)
+Matrix operator+(const double& lhs, const Matrix& rhs)
+Matrix operator+(const Matrix& lhs, const double& rhs)
