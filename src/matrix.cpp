@@ -96,7 +96,7 @@ Matrix& Matrix::operator+=(const double& n)
     return *this;
 }
 
-// TODO
+// TODO implement the below
 Matrix operator*(const Matrix& lhs, const Matrix& rhs)
 Matrix operator*(const double& lhs, const Matrix& rhs)
 Matrix operator*(const Matrix& lhs, const double& rhs)
