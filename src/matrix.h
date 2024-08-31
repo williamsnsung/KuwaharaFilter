@@ -6,6 +6,7 @@ class Matrix {
         Matrix(const Matrix& mtx);
 
         double& loc(int i, int j);
+        const double& loc(int i, int j) const;
         Matrix eigenvalues();
         // https://stackoverflow.com/questions/4421706/what-are-the-basic-rules-and-idioms-for-operator-overloading/4421719#4421719
         // Last accessed [2024-08-28]
