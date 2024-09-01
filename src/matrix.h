@@ -1,4 +1,5 @@
 #include <vector>
+#include <iostream>
 class Matrix {
     public:
         
@@ -31,6 +32,7 @@ class Matrix {
         friend Matrix operator+(const Matrix& lhs, const Matrix& rhs);
         friend Matrix operator+(const double& lhs, const Matrix& rhs);
         friend Matrix operator+(const Matrix& lhs, const double& rhs);
+        friend std::ostream& operator<<(std::ostream& os, const Matrix& n);
 
         int X, Y;
     private:
@@ -40,3 +42,4 @@ class Matrix {
         static const int& verify_positive(const int& param);
         static void verify_dimensions(const int& a, const int& b);
 };
+

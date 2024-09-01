@@ -123,67 +123,13 @@ Matrix operator*(const Matrix& lhs, const Matrix& rhs)
     return res;
 }
 
-Matrix operator*(const double& lhs, const Matrix& rhs)
-{
-    Matrix res = rhs;
-    res *= lhs;
-    return res;
-}
-
-Matrix operator*(const Matrix& lhs, const double& rhs)
-{
-    return rhs * lhs;
-}
-
-Matrix operator-(const Matrix& lhs, const Matrix& rhs)
-{
-    Matrix res = rhs;
-    res -= lhs;
-    return res;
-}
-
-Matrix operator-(const double& lhs, const Matrix& rhs)
-{
-    Matrix res = rhs;
-    res -= lhs;
-    return res;
-}
-
-Matrix operator-(const Matrix& lhs, const double& rhs)
-{
-    return rhs - lhs;
-}
-
-
-Matrix operator+(const Matrix& lhs, const Matrix& rhs)
-{
-    Matrix res = rhs;
-    res += lhs;
-    return res;
-}
-
-Matrix operator+(const double& lhs, const Matrix& rhs)
-{
-    Matrix res = rhs;
-    res += lhs;
-    return res;
-}
-
-Matrix operator+(const Matrix& lhs, const double& rhs)
-{
-    return rhs + lhs;
-}
-
-std::ostream& operator<<(std::ostream& os, const Matrix& n)
-{
-    std::string res = "";
-    for (int i = 0; i < n.X; i++)
-    {
-        for (int j = 0; j < n.Y; j++)
-        {
-            res += std::to_string(n.loc(i,j)) + "\t";
-        }
-        res += "\n";
-    }
-    return os << res;
-}
+//Matrix operator*(const double& lhs, const Matrix& rhs)
+//Matrix operator*(const Matrix& lhs, const double& rhs)
+//
+//Matrix operator-(const Matrix& lhs, const Matrix& rhs)
+//Matrix operator-(const double& lhs, const Matrix& rhs)
+//Matrix operator-(const Matrix& lhs, const double& rhs)
+//
+//Matrix operator+(const Matrix& lhs, const Matrix& rhs)
+//Matrix operator+(const double& lhs, const Matrix& rhs)
+//Matrix operator+(const Matrix& lhs, const double& rhs)
