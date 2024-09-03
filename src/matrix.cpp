@@ -28,6 +28,7 @@ Matrix::Matrix(const Matrix& mtx)
 {
 }
 
+// TODO range check
 // https://stackoverflow.com/questions/123758/how-do-i-remove-code-duplication-between-similar-const-and-non-const-member-func
 // Last accessed [2024-08-31]
 const double& Matrix::loc(int i, int j) const
@@ -59,7 +60,7 @@ Matrix& Matrix::operator*=(const Matrix& n)
         {
             for (int k = 0; k < Y; k++)
             {
-                res.loc(i,j) += this->loc(i,k) + n.loc(k,j);
+                res.loc(i,j) += this->loc(i,k) * n.loc(k,j);
             }
         }
     }
@@ -92,7 +93,10 @@ Matrix& Matrix::operator-=(const Matrix& n)
 }
 Matrix& Matrix::operator-=(const double& n)
 {
-    *this += -n;
+    for (auto& i : m)
+    {
+        i -= n;
+    }
     return *this;
 }
 
@@ -119,7 +123,7 @@ Matrix& Matrix::operator+=(const double& n)
 Matrix operator*(const Matrix& lhs, const Matrix& rhs)
 {
     Matrix res = lhs;
-    res += rhs;
+    res *= rhs;
     return res;
 }
 
@@ -132,46 +136,23 @@ Matrix operator*(const double& lhs, const Matrix& rhs)
 
 Matrix operator*(const Matrix& lhs, const double& rhs)
 {
-    return rhs * lhs;
+    Matrix res = lhs;
+    res *= rhs;
+    return res;
 }
 
 Matrix operator-(const Matrix& lhs, const Matrix& rhs)
 {
-    Matrix res = rhs;
-    res -= lhs;
+    Matrix res = lhs;
+    res -= rhs;
     return res;
 }
-
-Matrix operator-(const double& lhs, const Matrix& rhs)
-{
-    Matrix res = rhs;
-    res -= lhs;
-    return res;
-}
-
-Matrix operator-(const Matrix& lhs, const double& rhs)
-{
-    return rhs - lhs;
-}
-
 
 Matrix operator+(const Matrix& lhs, const Matrix& rhs)
 {
-    Matrix res = rhs;
-    res += lhs;
+    Matrix res = lhs;
+    res += rhs;
     return res;
-}
-
-Matrix operator+(const double& lhs, const Matrix& rhs)
-{
-    Matrix res = rhs;
-    res += lhs;
-    return res;
-}
-
-Matrix operator+(const Matrix& lhs, const double& rhs)
-{
-    return rhs + lhs;
 }
 
 std::ostream& operator<<(std::ostream& os, const Matrix& n)

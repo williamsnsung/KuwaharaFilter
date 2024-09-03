@@ -26,12 +26,8 @@ class Matrix {
         friend Matrix operator*(const Matrix& lhs, const double& rhs);
 
         friend Matrix operator-(const Matrix& lhs, const Matrix& rhs);
-        friend Matrix operator-(const double& lhs, const Matrix& rhs);
-        friend Matrix operator-(const Matrix& lhs, const double& rhs);
-
         friend Matrix operator+(const Matrix& lhs, const Matrix& rhs);
-        friend Matrix operator+(const double& lhs, const Matrix& rhs);
-        friend Matrix operator+(const Matrix& lhs, const double& rhs);
+
         friend std::ostream& operator<<(std::ostream& os, const Matrix& n);
 
         int X, Y;
