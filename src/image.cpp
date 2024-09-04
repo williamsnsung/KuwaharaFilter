@@ -85,14 +85,11 @@ int Image::write_to_file(std::string file_path)
     return stbi_write_jpg(file_path.c_str(), width, height, channels_in_file, rgb_image, jpeg_write_quality);
 }
 
-uint8_t& Image::loc(int i, int j)
+// https://stackoverflow.com/questions/48235421/get-rgb-of-a-pixel-in-stb-image
+// last accessed [2024-09-04]
+uint8_t* Image::loc(int i, int j)
 {
-    if (i >= height || j >= width || i < 0 || j < 0)
-    {
-        return Image::EDGE_PIXEL_VALUE;
-    }
-    return rgb_image[i * width + j];
-
+    return rgb_image + (j * width + i) * channels_in_file;
 }
 
 // NOTE: I did not write the below, just copied it from the source in the below answer

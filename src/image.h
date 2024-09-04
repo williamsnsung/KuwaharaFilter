@@ -25,7 +25,7 @@ class Image {
         void swap(Image& img);
 
         int write_to_file(std::string file_path);
-        uint8_t& loc(int i, int j); // height rows of width pixels
+        uint8_t* loc(int i, int j); // height rows of width pixels
 
     private:
         uint8_t* rgb_image;
