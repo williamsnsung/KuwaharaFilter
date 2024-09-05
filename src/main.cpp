@@ -32,10 +32,10 @@ Matrix convolve(const Matrix& input, const Matrix& kernel)
     {
         for (int j = 0; j < res.Y; j++)
         {
-            x = i;
-            y = j;
+            x = i - static_cast<int>(kernel.X/2);
+            y = j - static_cast<int>(kernel.Y/2);
             if (x < 0)
-                x == 0;
+                x = 0;
             if (x >= res.X)
                 x = res.X - 1;
             if (y < 0)
@@ -46,10 +46,14 @@ Matrix convolve(const Matrix& input, const Matrix& kernel)
             {
                 for (int b = 0; b < kernel.Y; b++)
                 {
-                    // TODO
+                    int xn = x + a;
+                    int yn = y + b;
+
+                    res.loc(i,j) += input.loc(xn, yn) * kernel.loc(a,b);
+                }
+            }
         }
     }
-
     return res;
 }
 
@@ -72,8 +76,52 @@ int main()
             b.loc(i, j) = static_cast<double>(img.loc(i,j)[2]);
         }
     }
+    
+    Matrix Gx(3,3);
+    Gx.loc(0,0) = 1;
+    Gx.loc(0,1) = 0;
+    Gx.loc(0,2) = -1;
+    Gx.loc(1,0) = 2;
+    Gx.loc(1,1) = 0;
+    Gx.loc(1,2) = -2;
+    Gx.loc(2,0) = 1;
+    Gx.loc(2,1) = 0;
+    Gx.loc(2,2) = -1;
 
-    Image res = get_image(r, g, b);
+    Matrix Gy(3,3);
+    Gy.loc(0,0) = 1;
+    Gy.loc(0,1) = 2;
+    Gy.loc(0,2) = 1;
+    Gy.loc(1,0) = 0;
+    Gy.loc(1,1) = 0;
+    Gy.loc(1,2) = 0;
+    Gy.loc(2,0) = -1;
+    Gy.loc(2,1) = -2;
+    Gy.loc(2,2) = -1;
+
+    Matrix rxSobel = convolve(r, Gx);
+    Matrix rySobel = convolve(r, Gy);
+    Matrix gxSobel = convolve(g, Gx);
+    Matrix gySobel = convolve(g, Gy);
+    Matrix bxSobel = convolve(b, Gx);
+    Matrix bySobel = convolve(b, Gy);
+
+    
+    Matrix rSobel = rxSobel + rySobel;
+    Matrix gSobel = gxSobel + gySobel;
+    Matrix bSobel = bxSobel + bySobel;
+
+    for (int i = 0; i < img.height; i++)
+    {
+        for (int j = 0; j < img.width; j++)
+        {
+            rSobel.loc(i, j) = static_cast<int>(sqrt(rSobel.loc(i,j)));
+            gSobel.loc(i, j) = static_cast<int>(sqrt(gSobel.loc(i,j)));
+            bSobel.loc(i, j) = static_cast<int>(sqrt(bSobel.loc(i,j)));
+        }
+    }
+
+    Image res = get_image(rSobel, gSobel, bSobel);
 
     res.write_to_file("image.jpg");
 
