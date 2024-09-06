@@ -1,5 +1,6 @@
 #include "image.h"
 
+// TODO look at file signature to see what image you should be throwing
 Image::Image(std::string file_path)
 {
     const char *c_file_path = file_path.c_str();
@@ -89,7 +90,7 @@ int Image::write_to_file(std::string file_path)
 // last accessed [2024-09-04]
 uint8_t* Image::loc(int i, int j)
 {
-    return rgb_image + (j * width + i) * channels_in_file;
+    return rgb_image + (i * width + j) * channels_in_file;
 }
 
 // NOTE: I did not write the below, just copied it from the source in the below answer

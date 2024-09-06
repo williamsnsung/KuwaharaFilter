@@ -59,17 +59,16 @@ Matrix convolve(const Matrix& input, const Matrix& kernel)
 
 int main()
 {
-    std::string file_path = "test.jpg";
+    std::string file_path = "grid.jpg";
     Image img(file_path);
-    std::cout << img.width << " " << img.height << "\n"; 
 
     Matrix r(img.width, img.height);
     Matrix g(img.width, img.height);
     Matrix b(img.width, img.height);
 
-    for (int i = 0; i < img.height; i++)
+    for (int i = 0; i < img.width; i++)
     {
-        for (int j = 0; j < img.width; j++)
+        for (int j = 0; j < img.height; j++)
         {
             r.loc(i, j) = static_cast<double>(img.loc(i,j)[0]);
             g.loc(i, j) = static_cast<double>(img.loc(i,j)[1]);
@@ -110,7 +109,7 @@ int main()
     Matrix rSobel = rxSobel + rySobel;
     Matrix gSobel = gxSobel + gySobel;
     Matrix bSobel = bxSobel + bySobel;
-
+/**
     for (int i = 0; i < img.height; i++)
     {
         for (int j = 0; j < img.width; j++)
@@ -120,7 +119,7 @@ int main()
             bSobel.loc(i, j) = static_cast<int>(sqrt(bSobel.loc(i,j)));
         }
     }
-
+*/
     Image res = get_image(rSobel, gSobel, bSobel);
 
     res.write_to_file("image.jpg");
