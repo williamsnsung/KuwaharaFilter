@@ -1,5 +1,0 @@
-Undefined symbols for architecture arm64:
-  "std::__1::basic_ostream<char, std::__1::char_traits<char>>& std::__1::operator<<[abi:ue170006]<char, std::__1::char_traits<char>, std::__1::allocator<char>>(std::__1::basic_ostream<char, std::__1::char_traits<char>>&, std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char>> const&)", referenced from:
-      operator<<(std::__1::basic_ostream<char, std::__1::char_traits<char>>&, Matrix const&) in matrix-bb2bd0.o
-ld: symbol(s) not found for architecture arm64
-clang: error: linker command failed with exit code 1 (use -v to see invocation)

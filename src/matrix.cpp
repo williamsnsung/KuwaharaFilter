@@ -41,15 +41,6 @@ double& Matrix::loc(int i, int j)
     return const_cast<double &>(static_cast<const Matrix &>(*this).loc(i,j));
 }
 
-// TODO implement the below
-/**
-Matrix Matrix::eigenvalues()
-{
-    verify_dimensions(X, Y);
-    
-}
-*/
-
 Matrix& Matrix::operator*=(const Matrix& n)
 {
     verify_dimensions(Y, n.X);
